@@ -1,3 +1,3 @@
-protocol SecondViewControllerDelegate: AnyObject {
-    func transferData(name: String)
+protocol FirstViewControllerDelegate: AnyObject {
+    func transferData() -> String
 }

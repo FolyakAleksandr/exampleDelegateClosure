@@ -5,22 +5,17 @@ final class SecondViewController: UIViewController {
     
     private let nameLabel = UILabel()
     
+    // MARK: - Public variables
+    
+    public weak var delegate: FirstViewControllerDelegate?
+    public var closure: (() -> (String))?
+    
     // MARK: - Lyfe cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupBackgroundVC()
-        
         setupUI()
-    }
-
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard let destination = segue.destination as? FirstViewController else { return }
-        destination.delegateName = self
-        destination.closure = { [weak self] text in
-            guard let self = self else { return }
-            self.nameLabel.text = text
-        }
     }
     
     // MARK: - Methods
@@ -43,13 +38,8 @@ final class SecondViewController: UIViewController {
         nameLabel.font = UIFont.systemFont(ofSize: 20, weight: UIFont.Weight.medium)
         nameLabel.textColor = .darkGray
         nameLabel.textAlignment = .center
-    }
-}
-
-// MARK: - Extension
-
-extension SecondViewController: SecondViewControllerDelegate {
-    func transferData(name: String) {
-        nameLabel.text = name
+        
+        nameLabel.text = delegate?.transferData()
+//        nameLabel.text = closure?()
     }
 }

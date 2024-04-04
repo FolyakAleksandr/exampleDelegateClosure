@@ -6,10 +6,9 @@ final class FirstViewController: UIViewController {
     private let nameTextField = UITextField()
     private let sendButton = UIButton()
     
-    // MARK: - Public properties
+    // MARK: - Private variables
 
-    public weak var delegateName: SecondViewControllerDelegate?
-    public var closure: ((String) -> ())?
+    private var helperModel = DataFromTextField()
     
     // MARK: - Life cycle
 
@@ -66,9 +65,24 @@ final class FirstViewController: UIViewController {
     
     @objc private func tapSendButton() {
         guard let textNameTextField = nameTextField.text else { return }
-        delegateName?.transferData(name: textNameTextField)
-        closure?(textNameTextField)
-        navigationController?.pushViewController(SecondViewController(), animated: true)
+        helperModel.data = textNameTextField
+        
+        let vc = SecondViewController()
+        vc.delegate = self
+        
+        vc.closure = {
+            return textNameTextField
+        }
+        
+        navigationController?.pushViewController(vc, animated: true)
         nameTextField.text = ""
+    }
+}
+
+// MARK: - Extension
+
+extension FirstViewController: FirstViewControllerDelegate {
+    func transferData() -> String {
+        return helperModel.data
     }
 }
